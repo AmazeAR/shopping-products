@@ -5,7 +5,8 @@ const bodyParser = require("body-parser");
 require("dotenv/config");
 
 const app = express();
-app.use(express.json());
+app.use(bodyParser.json());
+// app.use(express.json());
 app.use(cors());
 
 // Import Routes
