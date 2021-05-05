@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-require("dotenv/config");
+require("dotenv").config();
 
 const app = express();
 // app.use(bodyParser.json());
@@ -39,7 +39,7 @@ app.get("/", (req, res) => {
   res.send("working");
 });
 
-PORT = process.env.port || 7600;
+PORT = process.env.PORT || 7600;
 app.listen(PORT, () => {
   console.log(`server is running on port ${PORT}`);
 });
