@@ -22,16 +22,17 @@ const modelRoute = require("./routes/model");
 app.use("/model", modelRoute);
 
 // connect to mongoDB
-mongoose.connect(
-  process.env.DB_CONNECTION,
-  {
+mongoose
+  .connect(process.env.DB_CONNECTION, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
-  },
-  () => {
-    console.log("connected to DB");
-  }
-);
+  })
+  .then(() => {
+    console.log("connected to mongoDB");
+  })
+  .catch((error) => {
+    console.log("some error occure during mongoDB connection", error);
+  });
 
 app.get("/", (req, res) => {
   res.send("working");
