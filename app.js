@@ -34,7 +34,7 @@ mongoose.connect(
 );
 
 app.get("/", (req, res) => {
-  res.send("Manish");
+  res.send("working");
 });
 
 PORT = process.env.port || 7600;
