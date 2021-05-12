@@ -8,6 +8,6 @@ const groupCartSchema = mongoose.Schema({             // creating schema for the
   imageURL: String,
 });
 
-const GroupCart = mongoose.model("GroupCart", GroupCartSchema);   // groupCarts collection 
+const GroupCart = mongoose.model("GroupCart", groupCartSchema);   // groupCarts collection 
 
 module.exports = GroupCart;
