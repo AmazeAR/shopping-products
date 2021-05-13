@@ -1,8 +1,7 @@
 const express = require("express");
-
 const router = express.Router();
 
-// sending modal to user
+// sending model to user
 router.get("/", (req, res) => {
   res.send("Model sending");
 });
