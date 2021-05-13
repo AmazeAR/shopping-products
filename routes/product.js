@@ -17,7 +17,7 @@ router.get("/:category_name", (req, res, next) => {
       res.json(data);
     })
     .catch((err) => {
-      next(err)
+      next(err);
       res.json({ message: err });
     });
 });

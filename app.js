@@ -20,6 +20,9 @@ app.use("/categories", categoryRoute);
 const productsRoute = require("./routes/product");
 app.use("/products", productsRoute);
 
+const usersRoute = require("./routes/user");
+app.use("/users", usersRoute);
+
 const personalCartRoute = require("./routes/personalCart");
 app.use("/personlCart", personalCartRoute);
 
