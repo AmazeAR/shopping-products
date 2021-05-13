@@ -20,14 +20,16 @@ app.use("/categories", categoryRoute);
 const productsRoute = require("./routes/product");
 app.use("/products", productsRoute);
 
+const usersRoute = require("./routes/user");
+app.use("/users", usersRoute);
+
 const personalCartRoute = require("./routes/personalCart");
-app.use("/personlCart", personalCartRoute);
+app.use("/personalCart", personalCartRoute);
 
 const groupCartRoute = require("./routes/groupCart");
 app.use("/groupCart", groupCartRoute);
 
 const modelRoute = require("./routes/model");
-
 app.use("/model", modelRoute);
 
 // connect to mongoDB

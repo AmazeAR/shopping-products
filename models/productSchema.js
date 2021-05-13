@@ -1,12 +1,42 @@
+
 const mongoose = require("mongoose");
 
-// creating schema for product
-const productSchema = new mongoose.Schema({
-  category: { type: String, required: true },
-  name: { type: String, required: true },
-  price: { type: Number, required: true },
-  imageURL: { type: String, required: true },
-  description: { type: String, required: true },
+const productSchema = mongoose.Schema({                 // creating schema for the the products collection
+  categoryId: {
+    type: String, 
+    required: true 
+  },
+  categoryName: { 
+    type: String, 
+    required: true 
+  },
+  productName: {
+    type: String,
+    required: true
+  },
+  brandName: {
+    type: String,
+    required: [true, "brandName of product is required"]
+  },
+  productImage: { 
+    type: String, 
+    required: true 
+  },
+  price: { 
+    type: String, 
+    required: true 
+  },
+  description: { 
+    type: Object, 
+    required: [true, "description of product is required"] 
+  },
+  is_3dmodel: {
+    type: Boolean,
+    required: true
+  },
+  
 });
 
-module.exports = mongoose.model("product", productSchema);
+const Product =  mongoose.model("Product", productSchema);      // products collection
+
+module.exports = Product;

@@ -1,11 +1,18 @@
+
 const mongoose = require("mongoose");
 
-// creating schema for product
-const GroupCartSchema = mongoose.Schema({
-  group: String,
-  name: String,
-  price: Number,
-  imageURL: String,
+const groupCartSchema = mongoose.Schema({             // creating schema for the the group carts collection
+  groupId: {
+    type: String,
+    required: true
+  },
+  cart: [
+    {
+      productId: String
+    }
+  ]
 });
 
-module.exports = mongoose.model("groupCart", GroupCartSchema);
+const GroupCart = mongoose.model("group cart", groupCartSchema);   // group carts collection 
+
+module.exports = GroupCart;

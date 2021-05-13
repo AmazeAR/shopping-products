@@ -11,7 +11,7 @@
     "start": "nodemon app.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "AmazAR",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
