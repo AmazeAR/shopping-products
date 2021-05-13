@@ -2,11 +2,11 @@
 const mongoose = require("mongoose");
 
 const categorySchema = mongoose.Schema({        // creating schema for the the categories collection
-    name: { 
+    categoryName: { 
         type: String,
         required: true 
     },
-    imageURL: {
+    categoryImage: {
         type: String, 
         required: true
     }

@@ -5,10 +5,11 @@ const createError = require("http-errors");
 const mongoose = require("mongoose");
 
 router.get("/", (req, res, next) => {
+  
   Category.find({})
     .then((data) => {
       if (!data) {
-        throw createError(404, "Category not found");
+        throw createError(404, "Categories not found!");
       }
       res.json(data);
     })
@@ -19,12 +20,13 @@ router.get("/", (req, res, next) => {
 });
 
 router.post("/", (req, res, next) => {
+
   const category = new Category({
-    name: req.body.name,
-    imageURL: req.body.imageURL,
+    categoryName: req.body.categoryName,
+    categoryImage: req.body.categoryImage,
   });
-  category
-    .save()
+
+  category.save()
     .then((data) => {
       res.json(data);
     })

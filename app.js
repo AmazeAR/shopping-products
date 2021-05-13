@@ -27,7 +27,6 @@ const groupCartRoute = require("./routes/groupCart");
 app.use("/groupCart", groupCartRoute);
 
 const modelRoute = require("./routes/model");
-
 app.use("/model", modelRoute);
 
 // connect to mongoDB
