@@ -8,7 +8,7 @@ router.get("/", (req, res, next) => {
   
   Category.find({})
     .then((data) => {
-      if (!data) {
+      if (!data || !data.length) {
         throw createError(404, "Categories not found!");
       }
       res.json(data);

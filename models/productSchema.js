@@ -2,26 +2,39 @@
 const mongoose = require("mongoose");
 
 const productSchema = mongoose.Schema({                 // creating schema for the the products collection
-  category: {
+  categoryId: {
     type: String, 
     required: true 
   },
-  name: { 
+  categoryName: { 
+    type: String, 
+    required: true 
+  },
+  productName: {
+    type: String,
+    required: true
+  },
+  brandName: {
+    type: String,
+    required: [true, "brandName of product is required"]
+  },
+  productImage: { 
     type: String, 
     required: true 
   },
   price: { 
-    type: Number, 
-    required: true 
-  },
-  imageURL: { 
     type: String, 
     required: true 
   },
   description: { 
-    type: String, 
-    required: true 
-  }
+    type: Object, 
+    required: [true, "description of product is required"] 
+  },
+  is_3dmodel: {
+    type: Boolean,
+    required: true
+  },
+  
 });
 
 const Product =  mongoose.model("Product", productSchema);      // products collection
