@@ -1,7 +1,7 @@
 const express = require("express");
-const cors = require("cors");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const createError = require("http-errors");
 const morgan = require("morgan");
 
@@ -37,7 +37,11 @@ require("./initDB")();
 
 //base url
 app.get("/", (req, res) => {
-  res.send("working");
+  const greetingObj = {
+    projectName: "AmazAR",
+    message: "Hurrreeeee....."
+  }
+  res.json(greetingObj);
 });
 
 // wrong end point error handling
