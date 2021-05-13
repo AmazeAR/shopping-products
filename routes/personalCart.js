@@ -1,10 +1,9 @@
 
 const express = require("express");
 const PersonalCart = require("../models/personalCartSchema");
-const Product = require("../models/productSchema");
 const router = express.Router();
 
-// get all the carts from database
+// get all the personal carts from database
 router.get("/", (req, res) => {
 
   PersonalCart.find({})

@@ -1,40 +1,77 @@
 const express = require("express");
 const GroupCart = require("../models/groupCartSchema");
-const Product = require("../models/productSchema");
 const router = express.Router();
 
-// sending group cart items to groupCart
-router.get("/:groupId", (req, res) => {
-  GroupCart.find({group:req.params.groupId})
+// OPTIONAL get all the group carts from database although its only one in our case // just in case
+router.get("/", (req, res) => {
+
+  GroupCart.find({})
     .then((data) => {
       res.json(data);
-    }).catch((err) => {
-      res.json({ findingError: err });
-  })
+    })
+    .catch((err) => {
+      res.json({findingError:err})
+    });
+
 });
 
-// adding item to groupCart
-router.post("/:groupId/:productId", (req, res) => {
-  Product.findById(req.params.productId)
+// fetching items of group cart
+router.get("/:group_id", (req, res) => {
+
+  GroupCart.find({ groupId: req.params.group_id })
     .then((data) => {
-      console.log(data);
-      new GroupCart({
-        group: req.params.groupId,
-        name: data.name,
-        price: data.price,
-        imageURL: data.imageURL,
-      })
-        .save()
-        .then((data1) => {
-          res.json(data1);
-        })
-        .catch((err) => {
-          res.json({ savingError: err });
-        });
+      res.json(data);
     })
     .catch((err) => {
       res.json({ findingError: err });
     });
+});
+
+// adding item to groupCart
+router.post("/:group_id/:product_id", (req, res) => {
+
+  GroupCart.find({ groupId: req.params.group_id })
+    .then((data) => {
+      
+      if(!data || !data.length){
+        // creating the group cart to add the first product
+        const groupCart = new GroupCart({
+          groupId: req.params.group_id,
+          cart: [
+            {
+              productId: req.params.product_id
+            }
+          ]
+        });
+
+        groupCart.save()
+          .then((data) => {
+            res.json(data);
+          })
+          .catch((err) => {
+            res.json({savingError:err})
+          });
+
+      }
+      else{
+        // adding new product in existing group cart
+        const newProduct = {
+          productId: req.params.product_id
+        };
+
+        GroupCart.updateOne({ groupId: req.params.group_id }, { $addToSet: { cart: newProduct } })  // addToSet prevents the multiple addition of item into cart
+          .then((data) => {
+            res.json(data);
+          })
+          .catch((err) => {
+            res.json({savingError:err})
+          });               
+      }   
+    })
+    .catch((err) => {
+      res.json({ findingError: err });
+    });
+
 });
 
 module.exports = router;
