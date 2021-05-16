@@ -45,16 +45,28 @@ router.post("/", (req, res, next) => {
         profileImage: req.body.profileImage
     });
 
-    user.save()
+    User.find({ emailId: user.emailId})
         .then((data) => {
-            res.json(data);
+            if(!data || !data.length){
+                user.save()
+                .then((data) => {
+                    res.json(data);
+                })
+                .catch((err) => {
+                    if (err.name === "ValidationError") {
+                        next(createError(422, err.message));
+                        return;
+                      }
+                    next(err);
+                });
+            }
+            else{
+                throw createError(404, "User email already registered!");
+            }
         })
         .catch((err) => {
-            if (err.name === "ValidationError") {
-                next(createError(422, err.message));
-                return;
-              }
             next(err);
+            res.json({ message: err });
         });
 });
 
