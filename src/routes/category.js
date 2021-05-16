@@ -3,6 +3,7 @@ const router = express.Router();
 const Category = require("../models/categorySchema");
 const createError = require("http-errors");
 const mongoose = require("mongoose");
+const sendResponse = require('../lib/response');
 
 router.get("/", (req, res, next) => {
   
@@ -11,11 +12,11 @@ router.get("/", (req, res, next) => {
       if (!data || !data.length) {
         throw createError(404, "Categories not found!");
       }
-      res.json(data);
+      sendResponse(res,data,null);
     })
     .catch((err) => {
       next(err);
-      res.json({ message: err });
+      sendResponse(res,null,err);
     });
 });
 
@@ -28,7 +29,7 @@ router.post("/", (req, res, next) => {
 
   category.save()
     .then((data) => {
-      res.json(data);
+      sendResponse(res,data,null);
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
@@ -36,6 +37,7 @@ router.post("/", (req, res, next) => {
         return;
       }
       next(err);
+      sendResponse(res,null,err);
     });
 });
 
