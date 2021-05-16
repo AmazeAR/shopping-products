@@ -10,8 +10,6 @@ router.get("/:category_name", (req, res, next) => {
 
     Product.find({ categoryName: req.params.category_name }, { description: 0 })
         .then((data) => {
-            // ! ? if category_name is not present in database than should i return error or simpli return []
-            // kapil -> I think u should give error at this point coz a user cannot call that api anyway and if somehow we are calling that api point then it would be better if we got the error for easy debugging the problem
             if (!data || !data.length) {
                 throw createError(404, "Category does not exits");
             }
@@ -50,34 +48,37 @@ router.post("/", (req, res, next) => {
         categoryName: req.body.categoryName,
         productName: req.body.productName,
         brandName: req.body.brandName,
-        productName: req.body.productName,
+        productImage: req.body.productImage,
         price: req.body.price,
         description: req.body.description,
         is_3dmodel: req.body.is_3dmodel,
-        productImage: req.body.productImage,
     });
-    Category.find({ categoryName: req.body.categoryName }).then((data) => {
+
+    Category.find({ categoryName: product.categoryName, _id: product.categoryId })
+        .then((data) => {
             if (!data || !data.length) {
-                throw createError(404, "Make Sure to spell Category Name Correect and ID");
-            } else {
+                throw createError(404, "You cannot add this category product. Either check the typo in categoryName or categoryId or add this category first in category list");
+            } 
+            else {
                 product
-                    .save()
-                    .then((data) => {
-                        res.json(data);
-                    })
-                    .catch((err) => {
-                        if (err.name === "ValidationError") {
-                            next(createError(422, err.message));
-                            return;
-                        }
-                        next(err);
-                    });
+                .save()
+                .then((data) => {
+                    res.json(data);
+                })
+                .catch((err) => {
+                    if (err.name === "ValidationError") {
+                        next(createError(422, err.message));
+                        return;
+                    }
+                    next(err);
+                });
             }
         })
         .catch((err) => {
             next(err);
             res.json({ message: err });
         });
+
 });
 
 module.exports = router;
