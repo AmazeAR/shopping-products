@@ -53,6 +53,7 @@ router.post("/", (req, res, next) => {
     price: req.body.price,
     description: req.body.description,
     is_3dmodel: req.body.is_3dmodel,
+    productImage: req.body.productImage,
   });
 
   product
