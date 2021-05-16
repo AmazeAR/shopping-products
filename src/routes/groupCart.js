@@ -1,16 +1,17 @@
 const express = require("express");
 const GroupCart = require("../models/groupCartSchema");
 const router = express.Router();
+const sendResponse = require('../lib/response');
 
 // OPTIONAL get all the group carts from database although its only one in our case // just in case
 router.get("/", (req, res) => {
 
   GroupCart.find({})
     .then((data) => {
-      res.json(data);
+      sendResponse(res,data,null);
     })
     .catch((err) => {
-      res.json({findingError:err})
+      sendResponse(res,null,{findingError:err});
     });
 
 });
@@ -20,10 +21,10 @@ router.get("/:group_id", (req, res) => {
 
   GroupCart.find({ groupId: req.params.group_id })
     .then((data) => {
-      res.json(data);
+      sendResponse(res,data,null);
     })
     .catch((err) => {
-      res.json({ findingError: err });
+      sendResponse(res,null,{findingError:err});
     });
 });
 
@@ -45,11 +46,11 @@ router.post("/:group_id/:product_id", (req, res) => {
         });
 
         groupCart.save()
-          .then((data) => {
-            res.json(data);
+          .then((saveRes) => {
+            sendResponse(res,saveRes,null);
           })
           .catch((err) => {
-            res.json({savingError:err})
+            sendResponse(res,null,{savingError: err});
           });
 
       }
@@ -60,16 +61,16 @@ router.post("/:group_id/:product_id", (req, res) => {
         };
 
         GroupCart.updateOne({ groupId: req.params.group_id }, { $addToSet: { cart: newProduct } })  // addToSet prevents the multiple addition of item into cart
-          .then((data) => {
-            res.json(data);
+          .then((updateRes) => {
+            sendResponse(res,updateRes,null);
           })
           .catch((err) => {
-            res.json({savingError:err})
+            sendResponse(res,null,{savingError: err});
           });               
       }   
     })
     .catch((err) => {
-      res.json({ findingError: err });
+      sendResponse(res,null,{findingError: err});
     });
 
 });

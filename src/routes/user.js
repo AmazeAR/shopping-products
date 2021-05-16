@@ -4,17 +4,18 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const User  = require('../models/userSchema');
 const createError = require("http-errors");
+const sendResponse = require('../lib/response');
 
 // get all the users from the database
 router.get("/", (req, res, next) => {
 
     User.find({})
         .then((data) => {
-            res.json(data);
+            sendResponse(res,data,null);
         })
         .catch((err) => {
             next(err);
-            res.json({ message: err });
+            sendResponse(res,null,{ message: err });
         });
 });
 
@@ -26,18 +27,16 @@ router.get("/:user_id", (req, res, next) => {
             if (!data || !data.length) {
                 throw createError(404, "User does not exits");
             }
-            res.json(data);
+            sendResponse(res,data,null);
         })
         .catch((err) => {
             next(err);
-            res.json({ message: err });
+            sendResponse(res,null,{ message: err });
         });
 });
 
 // post a user to users collection
 router.post("/", (req, res, next) => {
-
-    // console.log(req.body); // consoling the body of the request
 
     const user = new User({
         fullName: req.body.fullName,
@@ -49,8 +48,8 @@ router.post("/", (req, res, next) => {
         .then((data) => {
             if(!data || !data.length){
                 user.save()
-                .then((data) => {
-                    res.json(data);
+                .then((saveRes) => {
+                    sendResponse(res,saveRes,null);
                 })
                 .catch((err) => {
                     if (err.name === "ValidationError") {
@@ -58,6 +57,7 @@ router.post("/", (req, res, next) => {
                         return;
                       }
                     next(err);
+                    sendResponse(res,null,{ message: err });
                 });
             }
             else{
@@ -66,7 +66,7 @@ router.post("/", (req, res, next) => {
         })
         .catch((err) => {
             next(err);
-            res.json({ message: err });
+            sendResponse(res,null,{ message: err });
         });
 });
 

@@ -4,6 +4,7 @@ const Product = require("../models/productSchema");
 const createError = require("http-errors");
 const mongoose = require("mongoose");
 const Category = require("../models/categorySchema");
+const sendResponse = require('../lib/response');
 
 // Get all products without description for a specific category from database and send to user
 router.get("/:category_name", (req, res, next) => {
@@ -13,11 +14,11 @@ router.get("/:category_name", (req, res, next) => {
             if (!data || !data.length) {
                 throw createError(404, "Category does not exits");
             }
-            res.json(data);
+            sendResponse(res,data,null);
         })
         .catch((err) => {
             next(err);
-            res.json({ message: err });
+            sendResponse(res,null,{ message: err });
         });
 });
 
@@ -29,7 +30,7 @@ router.get("/product/:product_id", (req, res, next) => {
             if (!data || !data.length) {
                 throw createError(404, "Product does not exits");
             }
-            res.json(data);
+            sendResponse(res,data,null);
         })
         .catch((err) => {
             if (err instanceof mongoose.CastError) {
@@ -37,6 +38,7 @@ router.get("/product/:product_id", (req, res, next) => {
                 return;
             }
             next(err);
+            sendResponse(res,null,{ message: err });
         });
 });
 
@@ -62,8 +64,8 @@ router.post("/", (req, res, next) => {
             else {
                 product
                 .save()
-                .then((data) => {
-                    res.json(data);
+                .then((saveRes) => {
+                    sendResponse(res,saveRes,null);
                 })
                 .catch((err) => {
                     if (err.name === "ValidationError") {
@@ -71,12 +73,13 @@ router.post("/", (req, res, next) => {
                         return;
                     }
                     next(err);
+                    sendResponse(res,null,{ message: err });
                 });
             }
         })
         .catch((err) => {
             next(err);
-            res.json({ message: err });
+            sendResponse(res,null,{ message: err });
         });
 
 });

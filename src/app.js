@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const createError = require("http-errors");
 const morgan = require("morgan");
+const sendResponse = require('./lib/response');
 
 require("dotenv").config();
 
@@ -41,7 +42,7 @@ app.get("/", (req, res) => {
     projectName: "AmazAR",
     message: "Hurrreeeee....."
   }
-  res.json(greetingObj);
+  sendResponse(res,greetingObj,null);
 });
 
 // wrong end point error handling
