@@ -54,7 +54,7 @@ router.post("/", (req, res, next) => {
         is_3dmodel: req.body.is_3dmodel,
     });
 
-    Category.find({ categoryName: product.categoryName, _id: product.categoryId })
+    Category.find({ categoryName: product.categoryName, _id: product.categoryId })  // first check weather added categoryName or categoryId is exist or not
         .then((data) => {
             if (!data || !data.length) {
                 throw createError(404, "You cannot add this category product. Either check the typo in categoryName or categoryId or add this category first in category list");
