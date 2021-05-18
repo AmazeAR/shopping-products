@@ -3,9 +3,7 @@ function sendResponse(res, data, err){
       "status": {
         "code": res.statusCode,
         "message": res.statusMessage
-      },
-      "data": data,
-      error: err
+      }
     });
 }
 
