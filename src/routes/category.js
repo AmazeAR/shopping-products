@@ -12,7 +12,7 @@ router.get("/", (req, res, next) => {
       if (!data || !data.length) {
         throw createError(404, "Categories not found!");
       }
-      red.json({data});
+      red.send(data);
     })
     .catch((err) => {
       next(err);
