@@ -21,7 +21,6 @@ const getProducts = (data) => {
         resolve(docs);
       })
       .catch((err) => {
-        console.log(err);
         resolve(err);
       });
   });
