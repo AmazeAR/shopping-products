@@ -1,9 +1,7 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const createError = require("http-errors");
-const morgan = require("morgan");
 const sendResponse = require('./lib/response');
 
 require("dotenv").config();
