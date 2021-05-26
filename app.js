@@ -27,6 +27,9 @@ app.use("/personalCart", personalCartRoute);
 const groupCartRoute = require("./src/routes/groupCart");
 app.use("/groupCart", groupCartRoute);
 
+const descriptionRoute = require('./src/routes/description');
+app.use('/description', descriptionRoute);
+
 const modelRoute = require("./src/routes/model");
 app.use("/model", modelRoute);
 
