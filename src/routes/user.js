@@ -11,11 +11,11 @@ router.get("/", (req, res, next) => {
 
     User.find({})
         .then((data) => {
-            sendResponse(res,data,null);
+            sendResponse({response: res, data: data, error:null});
         })
         .catch((err) => {
             next(err);
-            sendResponse(res,null,{ message: err });
+            sendResponse({response: res, data: null, error: {message: err} });
         });
 });
 
@@ -27,11 +27,11 @@ router.get("/:user_id", (req, res, next) => {
             if (!data || !data.length) {
                 throw createError(404, "User does not exits");
             }
-            sendResponse(res,data,null);
+            sendResponse({response: res, data: data, error:null});
         })
         .catch((err) => {
             next(err);
-            sendResponse(res,null,{ message: err });
+            sendResponse({response: res, data: null, error: {message: err} });
         });
 });
 
@@ -50,7 +50,7 @@ router.post("/", (req, res, next) => {
             if(!data || !data.length){
                 user.save()
                 .then((saveRes) => {
-                    sendResponse(res,saveRes,null);
+                    sendResponse({response: res, data: saveRes, error:null});
                 })
                 .catch((err) => {
                     if (err.name === "ValidationError") {
@@ -58,7 +58,7 @@ router.post("/", (req, res, next) => {
                         return;
                       }
                     next(err);
-                    sendResponse(res,null,{ message: err });
+                    sendResponse({response: res, data: null, error: {message: err} });
                 });
             }
             else{
@@ -67,7 +67,7 @@ router.post("/", (req, res, next) => {
         })
         .catch((err) => {
             next(err);
-            sendResponse(res,null,{ message: err });
+            sendResponse({response: res, data: null, error: {message: err} });
         });
 });
 

@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const Category = require("../models/categorySchema");
 const sendResponse = require('../lib/response');
 
-// Get all products without description for a specific category from database and send to user
+// Get all products without description for a specific category from database
 router.get("/:category_name", (req, res, next) => {
 
     Product.find({ categoryName: req.params.category_name }, { description: 0 })
@@ -14,11 +14,11 @@ router.get("/:category_name", (req, res, next) => {
             if (!data || !data.length) {
                 throw createError(404, "Category does not exits");
             }
-            sendResponse(res,data,null);
+            sendResponse({response: res, data: data, error:null});
         })
         .catch((err) => {
             next(err);
-            sendResponse(res,null,{ message: err });
+            sendResponse({response: res, data: null, error: {message: err} });
         });
 });
 
@@ -30,7 +30,7 @@ router.get("/product/:product_id", (req, res, next) => {
             if (!data || !data.length) {
                 throw createError(404, "Product does not exits");
             }
-            sendResponse(res,data,null);
+            sendResponse({response: res, data: data, error:null});
         })
         .catch((err) => {
             if (err instanceof mongoose.CastError) {
@@ -38,7 +38,7 @@ router.get("/product/:product_id", (req, res, next) => {
                 return;
             }
             next(err);
-            sendResponse(res,null,{ message: err });
+            sendResponse({response: res, data: null, error: {message: err} });
         });
 });
 
@@ -65,7 +65,7 @@ router.post("/", (req, res, next) => {
                 product
                 .save()
                 .then((saveRes) => {
-                    sendResponse(res,saveRes,null);
+                    sendResponse({response: res, data: saveRes, error:null});
                 })
                 .catch((err) => {
                     if (err.name === "ValidationError") {
@@ -73,13 +73,13 @@ router.post("/", (req, res, next) => {
                         return;
                     }
                     next(err);
-                    sendResponse(res,null,{ message: err });
+                    sendResponse({response: res, data: null, error: {message: err} });
                 });
             }
         })
         .catch((err) => {
             next(err);
-            sendResponse(res,null,{ message: err });
+            sendResponse({response: res, data: null, error: {message: err} });
         });
 
 });
@@ -91,7 +91,7 @@ router.get("/", (req, res, next) => {
         if (!data || !data.length) {
             throw createError(404, "Product does not exits");
         }
-        sendResponse(res,data,null);
+        sendResponse({response: res, data: data, error:null});
     })
     .catch((err) => {
         if (err instanceof mongoose.CastError) {
@@ -99,7 +99,7 @@ router.get("/", (req, res, next) => {
             return;
         }
         next(err);
-        sendResponse(res,null,{ message: err });
+        sendResponse({response: res, data: null, error: {message: err} });
     });
 })
 
