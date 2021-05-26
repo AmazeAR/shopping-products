@@ -12,7 +12,8 @@ router.get("/", (req, res, next) => {
       if (!data || !data.length) {
         throw createError(404, "Categories not found!");
       }
-      sendResponse(res,data,null);
+    res.send(data);
+//       sendResponse(res,data,null);
     })
     .catch((err) => {
       next(err);

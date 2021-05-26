@@ -84,4 +84,23 @@ router.post("/", (req, res, next) => {
 
 });
 
+// return all the products from database
+router.get("/", (req, res, next) => {
+    Product.find({})
+    .then((data) => {
+        if (!data || !data.length) {
+            throw createError(404, "Product does not exits");
+        }
+        sendResponse(res,data,null);
+    })
+    .catch((err) => {
+        if (err instanceof mongoose.CastError) {
+            next(createError(400, "Invalid product id"));
+            return;
+        }
+        next(err);
+        sendResponse(res,null,{ message: err });
+    });
+})
+
 module.exports = router;
