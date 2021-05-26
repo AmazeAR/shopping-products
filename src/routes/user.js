@@ -22,7 +22,7 @@ router.get("/", (req, res, next) => {
 // get a specific user with userId from database
 router.get("/:user_id", (req, res, next) => {
 
-    User.find({ _id: req.params.user_id })
+    User.find({ userId: req.params.user_id })
         .then((data) => {
             if (!data || !data.length) {
                 throw createError(404, "User does not exits");
@@ -39,6 +39,7 @@ router.get("/:user_id", (req, res, next) => {
 router.post("/", (req, res, next) => {
 
     const user = new User({
+        userId: req.body.userId,
         fullName: req.body.fullName,
         emailId: req.body.emailId,
         profileImage: req.body.profileImage

@@ -1,7 +1,11 @@
 
 const mongoose = require('mongoose');
 
-const userSchema = mongoose.Schema({     // creating schema for the users collection
+const userSchema = mongoose.Schema({  // creating schema for the users collection
+    userId: {   
+        type: String,
+        required: true
+    }, 
     fullName: {
         type: String,
         required: true
