@@ -1,9 +1,13 @@
-function sendResponse(res, data, err){
+function sendResponse({response: res,data: data,error: err}){
     res.json({
       "status": {
         "code": res.statusCode,
         "message": res.statusMessage
-      },"data": data,
+      },
+      "data": data,
+      "error": {
+        err
+      }
     });
 }
 

@@ -2,17 +2,14 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const createError = require("http-errors");
-
 const sendResponse = require('./src/lib/response');
-
 
 require("dotenv").config();
 
 const app = express();
+
 app.use(bodyParser.json());
-// app.use(express.json());
 app.use(cors());
-// app.use(morgan("dev"));
 
 // Import Routes
 const categoryRoute = require("./src/routes/category");
@@ -34,15 +31,15 @@ const modelRoute = require("./src/routes/model");
 app.use("/model", modelRoute);
 
 // connect to mongoDB
-require("./src/initDB")();
+require("./initDB")();
 
 //base url
 app.get("/", (req, res) => {
   const greetingObj = {
     projectName: "AmazAR",
-    message: "Hurrreeeee....."
+    message: "We are building an online shopping application with functionality of AR and collaborative shopping!"
   }
-  sendResponse(res,greetingObj,null);
+  sendResponse({response: res, data: greetingObj, error: null});
 });
 
 // wrong end point error handling

@@ -8,10 +8,10 @@ router.get("/", (req, res) => {
 
   GroupCart.find({})
     .then((data) => {
-      sendResponse(res,data,null);
+      sendResponse({response: res, data: data, error: null});
     })
     .catch((err) => {
-      sendResponse(res,null,{findingError:err});
+      sendResponse({response: res, data: null, error:{findingError: err} });
     });
 
 });
@@ -21,10 +21,10 @@ router.get("/:group_id", (req, res) => {
 
   GroupCart.find({ groupId: req.params.group_id })
     .then((data) => {
-      sendResponse(res,data,null);
+      sendResponse({response: res, data: data, error: null});
     })
     .catch((err) => {
-      sendResponse(res,null,{findingError:err});
+      sendResponse({response: res, data: null, error:{findingError: err} });
     });
 });
 
@@ -47,10 +47,10 @@ router.post("/:group_id/:product_id", (req, res) => {
 
         groupCart.save()
           .then((saveRes) => {
-            sendResponse(res,saveRes,null);
+            sendResponse({response: res, data: saveRes, error:null });
           })
           .catch((err) => {
-            sendResponse(res,null,{savingError: err});
+            sendResponse({response: res, data: null, error:{savingError: err} });
           });
 
       }
@@ -62,15 +62,15 @@ router.post("/:group_id/:product_id", (req, res) => {
 
         GroupCart.updateOne({ groupId: req.params.group_id }, { $addToSet: { cart: newProduct } })  // addToSet prevents the multiple addition of item into cart
           .then((updateRes) => {
-            sendResponse(res,updateRes,null);
+            sendResponse({response: res, data: updateRes, error:null });
           })
           .catch((err) => {
-            sendResponse(res,null,{savingError: err});
+            sendResponse({response: res, data: null, error:{savingError: err} });
           });               
       }   
     })
     .catch((err) => {
-      sendResponse(res,null,{findingError: err});
+      sendResponse({response: res, data: null, error:{findingError: err} });
     });
 
 });

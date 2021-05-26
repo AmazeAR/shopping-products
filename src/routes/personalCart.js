@@ -5,49 +5,35 @@ const sendResponse = require("../lib/response");
 const Product = require("../models/productSchema");
 const mongoose = require("mongoose");
 
-//get products of Ids that has fetched before
-const getProducts = (data) => {
-  return new Promise((resolve) => {
-    const proId = [];
-    for (i = 0; i < data[0]["cart"].length; i++) {
-      proId.push(mongoose.Types.ObjectId(data[0]["cart"][i]["productId"]));
-    }
-    Product.find({
-      _id: {
-        $in: proId,
-      },
-    })
-      .then((docs) => {
-        resolve(docs);
-      })
-      .catch((err) => {
-        resolve(err);
-      });
-  });
-};
-
 // get all the personal carts from database
 router.get("/", (req, res) => {
   PersonalCart.find({})
     .then((data) => {
-      sendResponse(res, data, null);
+      sendResponse({response: res, data: data, error:null});
     })
     .catch((err) => {
-      sendResponse(res, null, { findingError: err });
+      sendResponse({response: res, data: null, error:{findingError: err} });
     });
 });
 
-// Get cart of a specific user
+// Get products in cart for a specific user
 router.get("/:user_id", (req, res) => {
   PersonalCart.find({ userId: req.params.user_id })
     .then((data) => {
-      getProducts(data).then((result) => {
-        // res.send(result);
-        sendResponse(res, result, null);
+      return data[0]; // data is in array of 1 object
+    })
+    .then((data) => {
+      const userId = data.userId;  
+      const cart = data.cart;
+
+      getProducts(userId, cart)
+      .then((products) => {
+        sendResponse({response: res, data: products, error:null});
       });
+
     })
     .catch((err) => {
-      sendResponse(res, null, { findingError: err });
+      sendResponse({response: res, data: null, error:{findingError: err} });
     });
 });
 
@@ -69,10 +55,10 @@ router.post("/:user_id/:product_id", (req, res) => {
         personalCart
           .save()
           .then((saveRes) => {
-            sendResponse(res, saveRes, null);
+            sendResponse({response: res, data: saveRes, error:null});
           })
           .catch((err) => {
-            sendResponse(res, null, { savingError: err });
+            sendResponse({response: res, data: null, error: {savingError: err} });
           });
       } else {
         // adding new product in existing cart
@@ -85,16 +71,37 @@ router.post("/:user_id/:product_id", (req, res) => {
           { $addToSet: { cart: newProduct } }
         ) // addToSet prevents the multiple addition of item into cart
           .then((updateRes) => {
-            sendResponse(res, updateRes, null);
+            sendResponse({response: res, data: updateRes, error:null});
           })
           .catch((err) => {
-            sendResponse(res, null, { savingError: err });
+            sendResponse({response: res, data: null, error: {savingError: err} });
           });
       }
     })
     .catch((err) => {
-      sendResponse(res, null, { findingError: err });
+      sendResponse({response: res, data: null, error:{findingError: err} });
     });
 });
+
+//get all products for specific productId that has fetched in carts
+const getProducts = (userId, cart) => {
+  return new Promise((resolve) => {
+    const products = [];
+    for (i = 0; i < cart.length; i++) {
+      products.push(mongoose.Types.ObjectId(cart[i].productId));
+    }
+    Product.find({
+      _id: {
+        $in: products,
+      },
+    }, {description: 0})  // products without description
+    .then((docs) => {
+      resolve(docs);
+    })
+    .catch((err) => {
+      resolve(err);
+    });
+  });
+};
 
 module.exports = router;
