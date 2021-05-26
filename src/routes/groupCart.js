@@ -2,6 +2,7 @@ const express = require("express");
 const GroupCart = require("../models/groupCartSchema");
 const router = express.Router();
 const sendResponse = require('../lib/response');
+const getProductsFromCart = require('../lib/cartProducts');
 
 // OPTIONAL get all the group carts from database although its only one in our case // just in case
 router.get("/", (req, res) => {
@@ -16,12 +17,25 @@ router.get("/", (req, res) => {
 
 });
 
-// fetching items of group cart
+// fetching products of group cart
 router.get("/:group_id", (req, res) => {
 
   GroupCart.find({ groupId: req.params.group_id })
     .then((data) => {
-      sendResponse({response: res, data: data, error: null});
+      return data[0]; // data is in array of 1 object
+    })
+    .then((data) => {
+      const groupId = data.groupId;  
+      const cart = data.cart;
+
+      getProductsFromCart(cart)
+      .then((products) => {
+        sendResponse({response: res, data: products, error:null});
+      })
+      .catch((err) => {
+        sendResponse({response: res, data: null, error: {message: err.message} });
+      })
+
     })
     .catch((err) => {
       sendResponse({response: res, data: null, error:{findingError: err} });

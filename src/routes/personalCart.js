@@ -2,6 +2,7 @@ const express = require("express");
 const PersonalCart = require("../models/personalCartSchema");
 const router = express.Router();
 const sendResponse = require("../lib/response");
+const getProductsFromCart = require('../lib/cartProducts');
 const Product = require("../models/productSchema");
 const mongoose = require("mongoose");
 
@@ -26,10 +27,13 @@ router.get("/:user_id", (req, res) => {
       const userId = data.userId;  
       const cart = data.cart;
 
-      getProducts(userId, cart)
+      getProductsFromCart(cart)
       .then((products) => {
         sendResponse({response: res, data: products, error:null});
-      });
+      })
+      .catch((err) => {
+        sendResponse({response: res, data: null, error: {message: err.message} });
+      })
 
     })
     .catch((err) => {
@@ -82,26 +86,5 @@ router.post("/:user_id/:product_id", (req, res) => {
       sendResponse({response: res, data: null, error:{findingError: err} });
     });
 });
-
-//get all products for specific productId that has fetched in carts
-const getProducts = (userId, cart) => {
-  return new Promise((resolve) => {
-    const products = [];
-    for (i = 0; i < cart.length; i++) {
-      products.push(mongoose.Types.ObjectId(cart[i].productId));
-    }
-    Product.find({
-      _id: {
-        $in: products,
-      },
-    }, {description: 0})  // products without description
-    .then((docs) => {
-      resolve(docs);
-    })
-    .catch((err) => {
-      resolve(err);
-    });
-  });
-};
 
 module.exports = router;
