@@ -89,4 +89,16 @@ router.post("/:group_id/:product_id", (req, res) => {
 
 });
 
+// deletes a perticuler item from users cart
+router.delete("/:group_id/:product_id", (req,res) => {
+  GroupCart.updateOne({groupId: req.params.group_id}, {$pull: { cart: {productId : req.params.product_id} } })
+      .then((data) => {     
+        sendResponse({response: res, data: data,error: null});
+      })
+      .catch((err) => {
+        console.log(err);
+        sendResponse({response: res, data: null,error: err});
+      })
+})
+
 module.exports = router;

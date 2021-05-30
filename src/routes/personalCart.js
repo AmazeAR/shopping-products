@@ -87,4 +87,20 @@ router.post("/:user_id/:product_id", (req, res) => {
     });
 });
 
+
+// deletes a perticuler item from users cart
+router.delete("/:user_id/:product_id", (req,res) => {
+  PersonalCart.updateOne({userId: req.params.user_id}, {$pull: { cart: {productId : req.params.product_id} } })
+      .then((data) => {
+        sendResponse({response: res, data: data, error: null});
+      })
+      .catch((err) => {
+        console.log(err);
+        sendResponse({response: res, data: data, error: null});
+      })
+})
+
 module.exports = router;
+
+
+// ({userId: user_id}, {$pull: {"productId": product_id}})  // findAndModify deleteOne update
