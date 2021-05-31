@@ -27,7 +27,7 @@ const productSchema = mongoose.Schema({                 // creating schema for t
     required: true 
   },
   description: { 
-    type: Object, 
+    type: String, 
     required: [true, "description of product is required"] 
   },
   is_3dmodel: {
