@@ -89,7 +89,7 @@ router.get('/groupCarts/:user_id', (req,res) => {
 })
 
 // add a groupCart for a user
-router.post('/groupCart/:user_id/:group_id', (req,res) => {
+router.post('/groupCart/:user_id/:group_name/:group_id', (req,res) => {
 
     User.find({userId: req.params.user_id})
     .then((data) => {
@@ -99,6 +99,8 @@ router.post('/groupCart/:user_id/:group_id', (req,res) => {
         else{
             const newGroupCart = {
                 groupId: req.params.group_id,
+                groupName: req.params.group_name,
+                timeStamp: new Date().toDateString(),
             };
             User.updateOne(
                 { userId: req.params.user_id },
