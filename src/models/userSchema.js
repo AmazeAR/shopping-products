@@ -17,6 +17,9 @@ const userSchema = mongoose.Schema({  // creating schema for the users collectio
     profileImage: {
         type: String
     },
+    groupCarts: {
+        type: Array,
+    }
 })
 
 const User = mongoose.model("User", userSchema);   // users collection
