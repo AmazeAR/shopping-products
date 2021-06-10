@@ -79,6 +79,7 @@ router.get('/groupCarts/:user_id', (req,res) => {
         }
         else{
             const groupCarts = data[0].groupCarts;
+            groupCarts.reverse();
             sendResponse({response: res, data: groupCarts, error: null});
         }
     })
