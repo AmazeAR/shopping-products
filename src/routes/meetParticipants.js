@@ -2,6 +2,7 @@ const express = require("express");
 const createError = require("http-errors");
 const sendResponse = require('../lib/response');
 const MeetParticipants = require("../models/meetParticipantsSchema");
+const getUsersFromUserId  = require('../lib/shoppingMembers');
 
 const router = express.Router();
 
@@ -14,8 +15,17 @@ router.get('/:group_id', (req,res) => {
             throw createError(404,"shopping group does not exist!");
         }
         else{
+            
             const meetObj = meet[0];
-            sendResponse({response: res, data: meetObj.participants, error: null});
+            const participants = meetObj.participants;
+            getUsersFromUserId(participants)
+            .then((users) => {
+                sendResponse({response: res, data: users, error:null});
+            })
+            .catch((err) => {
+                sendResponse({response: res, data: null, error: {message: err.message} });
+            })
+           
         }
     })
     .catch((err) => {
