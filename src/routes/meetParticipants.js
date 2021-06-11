@@ -23,33 +23,28 @@ router.get('/:group_id', (req,res) => {
     });
 })
 
- // create a new shopping group with host as a user
-router.post('/create/:group_id/:user_id', (req,res) => {
-   
-    const newMeetGroup = new MeetParticipants({
-        groupId: req.params.group_id,
-        participants: [
-            {
-                userId: req.params.user_id
-            }
-        ]
-    })
-    newMeetGroup.save(newMeetGroup)
-    .then((saveRes) => {
-        sendResponse({response: res, data: saveRes, error: null});
-    })
-    .catch((err) => {
-        sendResponse({response: res, data: null, error: {savingError: err} });
-    })
-})
-
 // add a members to shopping group
 router.post('/:group_id/:user_id', (req,res) => {
 
     MeetParticipants.find({groupId: req.params.group_id})
     .then((meet) => {
+        // create a new shopping group with host as a user
         if(!meet || !meet.length){
-           throw createError(404, "shopping grp does not exist!");
+            const newMeetGroup = new MeetParticipants({
+                groupId: req.params.group_id,
+                participants: [
+                    {
+                        userId: req.params.user_id
+                    }
+                ]
+            })
+            newMeetGroup.save(newMeetGroup)
+            .then((saveRes) => {
+                sendResponse({response: res, data: saveRes, error: null});
+            })
+            .catch((err) => {
+                sendResponse({response: res, data: null, error: {savingError: err} });
+            })
         }
         else{
             const newParticipant = {
@@ -68,6 +63,7 @@ router.post('/:group_id/:user_id', (req,res) => {
         }
     })
     .catch((err) => {
+        console.log(err);
         sendResponse({response: res, data: null, error:{findingError: err} });
     });
 
