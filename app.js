@@ -9,6 +9,7 @@ const productsRoute = require("./src/routes/product");
 const usersRoute = require("./src/routes/user");
 const descriptionRoute = require('./src/routes/description');
 const cartRoute = require('./src/routes/cart');
+const participantsRoute = require('./src/routes/meetParticipants');
 
 require("dotenv").config();
 
@@ -30,6 +31,8 @@ app.use("/users", usersRoute);
 app.use('/description', descriptionRoute);
 
 app.use('/cart',cartRoute);
+
+app.use('/meetparticipants', participantsRoute);
 
 // wrong end point error handling
 app.use((req, res, next) => {
