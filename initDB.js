@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
-module.exports = () => {
-  mongoose
+module.exports = async () => {
+  await mongoose
     .connect(process.env.MONGODB_URI, {
       dbName: process.env.DB_NAME,
       user: process.env.DB_USER,
