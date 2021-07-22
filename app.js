@@ -11,12 +11,12 @@ const descriptionRoute = require('./src/routes/description');
 const cartRoute = require('./src/routes/cart');
 const participantsRoute = require('./src/routes/meetParticipants');
 
+const app = express();
+
 require("dotenv").config();
 
 // connect to mongoDB
 require("./initDB")();
-
-const app = express();
 
 app.use(bodyParser.json());
 
