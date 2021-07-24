@@ -11,50 +11,57 @@ const descriptionRoute = require("./src/routes/description");
 const cartRoute = require("./src/routes/cart");
 const participantsRoute = require("./src/routes/meetParticipants");
 
-const app = express();
-
+// config connection enviornment
 require("dotenv").config();
 
-// connect to mongoDB
-require("./initDB")();
+// import mongoose connetion function
+const mongo = require("./initDB");
 
-app.use(bodyParser.json());
+mongo().then(() => {
+	const app = express();
 
-app.use(cors());
+	// connect to mongoDB
+	// require("./initDB")();
 
-app.use("/categories", categoryRoute);
+	app.use(bodyParser.json());
 
-app.use("/products", productsRoute);
+	app.use(cors());
 
-app.use("/users", usersRoute);
+	app.use("/categories", categoryRoute);
 
-app.use("/description", descriptionRoute);
+	app.use("/products", productsRoute);
 
-app.use("/cart", cartRoute);
+	app.use("/users", usersRoute);
 
-app.use("/meetparticipants", participantsRoute);
+	app.use("/description", descriptionRoute);
 
-app.use((err, req, res, next) => {
-	res.status(err.status || 500);
-	res.send({
-		error: {
-			status: err.status,
-			message: err.message,
-		},
+	app.use("/cart", cartRoute);
+
+	app.use("/meetparticipants", participantsRoute);
+
+	app.use((err, req, res, next) => {
+		res.status(err.status || 500);
+		res.send({
+			error: {
+				status: err.status,
+				message: err.message,
+			},
+		});
 	});
-});
 
-//base url
-app.get("/", (req, res) => {
-	const greetingObj = {
-		projectName: "AmazeAR",
-		message:
-			"We are building an online shopping application with functionality of AR and collaborative shopping!",
-	};
-	sendResponse({ response: res, data: greetingObj, error: null });
-});
+	//base url
+	app.get("/", (req, res) => {
+		const greetingObj = {
+			projectName: "AmazeAR",
+			message:
+				"We are building an online shopping application with functionality of AR and collaborative shopping!",
+		};
+		sendResponse({ response: res, data: greetingObj, error: null });
+	});
 
-const PORT = process.env.PORT || 7600;
-app.listen(PORT, () => {
-	console.log(`server is running on port ${PORT}`);
+	const PORT = process.env.PORT || 7600;
+	app.listen(PORT, () => {
+		console.log(`server is running on port ${PORT}`);
+	});
+  
 });
