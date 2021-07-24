@@ -4,22 +4,18 @@ const Category = require("../models/categorySchema");
 const createError = require("http-errors");
 const sendResponse = require("../lib/response");
 
-const mongo = require("../../initDB");
-
 router.get("/", (req, res, next) => {
-	mongo().then(() => {
-		Category.find({})
-			.then((data) => {
-				if (!data || !data.length) {
-					throw createError(404, "Categories not found!");
-				}
-				sendResponse({ response: res, data: data, error: null });
-			})
-			.catch((err) => {
-				next(err);
-				sendResponse({ response: res, data: null, error: err });
-			});
-	});
+	Category.find({})
+		.then((data) => {
+			if (!data || !data.length) {
+				throw createError(404, "Categories not found!");
+			}
+			sendResponse({ response: res, data: data, error: null });
+		})
+		.catch((err) => {
+			next(err);
+			sendResponse({ response: res, data: null, error: err });
+		});
 });
 
 router.post("/", (req, res, next) => {

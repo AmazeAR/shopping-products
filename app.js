@@ -17,9 +17,6 @@ require("dotenv").config();
 // connect to mongoDB
 require("./initDB")();
 
-// import mongoose connetion function
-const mongo = require("./initDB");
-
 const app = express();
 
 app.use(bodyParser.json());
